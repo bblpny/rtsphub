@@ -45,7 +45,11 @@
 #		define VLCHOST_NAMESPACE(...) VLCHOST_NAMESPACE_##__VA_ARGS__
 #	endif
 
-#	include "../include/vlcx/vlcx.h"
+#	include "./../include/vlcx/vlcx.h"
+
+#	define VLCHOST_NA
+#	define VLCHOST_COMMA2(...)VLCHOST_NA , VLCHOST_NA
+#	define VLCHOST_COMMA VLCHOST_COMMA2()
 
 #	define VLCHOST_OS_WINDOWS 1
 #	define VLCHOST_OS_OTHER 2
@@ -60,7 +64,7 @@
 #		endif
 #	endif
 
-#	include "../include/json.hpp"
+#	include "./../include/json.hpp"
 using json = nlohmann::json;
 
 #	include "include/vlchost_job.h"

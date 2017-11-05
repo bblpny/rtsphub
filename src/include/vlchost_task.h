@@ -245,7 +245,7 @@ Macro_VLCHOST_ImplementArgT(boo, bool);
 
 
 #define Macro_VLCHOST_ArgImplement(e,e_t,flgs,def) \
-__pragma(message("{\"" #e "\":\""#e_t "," #def "\"...("#flgs")} = e_arg::" #e ))  \
+/*__pragma(message("{\"" #e "\":\""#e_t "," #def "\"...("#flgs")} = e_arg::" #e )) */ \
 template<> struct x_arg<e_arg::e> : public x_argt<e_argt::e_t> { \
 	static constexpr const char title[] = #e ; \
 	static constexpr const e_arg name = e_arg::e; \
@@ -284,7 +284,7 @@ private:
 		void**argptr= argptrdump;
 
 		// get the return by invoking the function (finally).
-		auto ret = x_op<e>::invoke<tinv, typename x_arg<es>::ctype_t...>(
+		auto ret = x_op<e>::template invoke<tinv, typename x_arg<es>::ctype_t...>(
 			vlc,
 			x_nce2ce<
 				typename x_arg<es>::type_t,
@@ -402,7 +402,7 @@ template<> VLCHOST_INLINE auto c_value(const std::string &i) { return i.c_str();
 template<> VLCHOST_INLINE auto c_value(const std::vector < std::string> &) { return nullptr; }
 
 #define Macro_VLCHOST_OP(ret,e,titlechars,call,prec,postc,...) \
-__pragma(message("{\"op\":\"" titlechars "\"...("#__VA_ARGS__")} = e_op::" #e "\n\t(VLCInstance::"#call")"))  \
+/*__pragma(message("{\"op\":\"" titlechars "\"...("#__VA_ARGS__")} = e_op::" #e "\n\t(VLCInstance::"#call")"))*/	\
 template<> struct x_op<e_op::e> : public x_opt<e_ret::ret,x_arglist<__VA_ARGS__>>{ \
 	static const constexpr char title[] = titlechars; \
 	static const constexpr e_op op = e_op::e; \
@@ -434,20 +434,17 @@ struct opresult {
 
 	template<typename T> VLCHOST_INLINE const constexpr T&get_ret()const;
 	VLCHOST_INLINE constexpr opresult(const e_op _op, const bool v)
-		: ret_print(nullptr)
-		, ret_bool(v)
+		: ret_bool(v)
 		, ret(e_ret::R)
 		, op(_op)
 		, found(true) {}
 	VLCHOST_INLINE constexpr opresult(const e_op _op, const unsigned v)
-		: ret_print(nullptr)
-		, ret_unsigned(v)
+		: ret_unsigned(v)
 		, ret(e_ret::R)
 		, op(_op)
 		, found(true) {}
 	VLCHOST_INLINE constexpr opresult(const e_op _op, const signed v)
-		: ret_print(nullptr)
-		, ret_signed(v)
+		: ret_signed(v)
 		, ret(e_ret::R)
 		, op(_op)
 		, found(true) {}
@@ -457,15 +454,14 @@ struct opresult {
 		, op(_op)
 		, found(true) {}
 	VLCHOST_INLINE constexpr opresult(const e_op _op, const e_void)
-		: ret_print(nullptr)
-		, ret_void((e_void)0)
+		: ret_void((e_void)0)
 		, ret(e_ret::P)
 		, op(_op)
 		, found(true) {}
 	VLCHOST_INLINE constexpr opresult()
 		: ret_print(nullptr)
 		, ret(e_ret::U)
-		, op((e_op)(x_enum<e_op>::count))
+		, op((e_op)0)
 		, found(false) {}
 };
 template<> constexpr const char *const &opresult::get_ret<const char *>()const { return ret_print; }
@@ -490,8 +486,11 @@ VLCHOST_INLINE bool &json_exec_lim(
 	const bool dummy[] = {
 		(!res.found && 
 		op == x_op<choices>::title && 
-		((void)(res=opresult(choices,x_op<choices>::json_invoke<tinv>(vlc,j))),true))...
+		((void)(res=opresult(choices,x_op<choices>::template json_invoke<tinv>(vlc,j))),true))...
 	};
+	// just to make sure clang does not optimize it out.
+	// (not sure how to do this the right way..)
+	for (int i = (sizeof(dummy) / sizeof(bool)) - 1; i >= 0;--i)if (dummy[i])--i;
 	return res.found;
 }
 template<typename tinv> VLCHOST_INLINE bool json_exec(

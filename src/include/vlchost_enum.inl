@@ -14,10 +14,10 @@ struct x_enum_int {
 		static constexpr const t v[] = { ((t)ts)... };
 	};
 };
-template<typename i, i...vs> using enum_values = typename x_enum_int<i>::values<vs...>;
+template<typename i, i...vs> using enum_values = typename x_enum_int<i>::template values<vs...>;
 
 template<typename t, typename _i, typename ei, _i...vs>
-struct x_enumbase : public x_enum_int<t>::values<(t)vs...> {
+struct x_enumbase : public x_enum_int<t>::template values<(t)vs...> {
 	using type = t;
 	using i = _i;
 	using enum_int = ei;
@@ -28,8 +28,8 @@ template<typename t> struct x_enum;
 #define VLCHOST_ENUM(Name, isto,...) \
 enum class e_##Name : isto{__VA_ARGS__};\
 namespace _enum_forget_{ struct E##Name {\
-	enum {__VA_ARGS__,};\
-	using i_##Name = enum_values<isto,##__VA_ARGS__>;\
+	enum {__VA_ARGS__};\
+	using i_##Name =  x_enum_int<isto>:: values<__VA_ARGS__>;\
 	using E_##Name = x_enumbase<e_##Name,isto,i_##Name,##__VA_ARGS__>;\
 };};\
 template<> struct x_enum<e_##Name> : public _enum_forget_::E##Name::E_##Name 
@@ -94,24 +94,31 @@ VLCHOST_ENUM(arg, int8_t,
 #undef Macro_VLCHOST_PrintFirst
 
 #define Macro_VLCHOST_OP(r,name,...) name
+#if _MSC_VER && !defined(__clang__)
 #define wait ,wait
+#endif
 VLCHOST_ENUM(op, int8_t,
 	Macro_VLCHOST_Enumerate_Op(, )
 ) {};
+#if _MSC_VER && !defined(__clang__)
 #undef wait
+#endif
 #undef Macro_VLCHOST_OP
+#if _MSC_VER && !defined(__clang__)
 // have no idea why this is neccisary.
 #define SetAppId ,SetAppId
 #define SetUserAgent ,SetUserAgent
 #define Wait ,Wait
+#endif
 #define Macro_VLCHOST_OP(r,n,sz,call,...) call
 VLCHOST_ENUM(call, int8_t,
-	Macro_VLCHOST_Enumerate_Op(, )
+	Macro_VLCHOST_Enumerate_Op(VLCHOST_COMMA)
 ) {};
+#if _MSC_VER && !defined(__clang__)
 #undef SetAppId
 #undef SetUserAgent
 #undef Wait
-
+#endif
 #undef Macro_VLCHOST_OP
 
 #ifndef _forget_less_one
@@ -146,5 +153,5 @@ template<typename t_enum>
 VLCHOST_INLINE constexpr size_t enum_num() { return x_enum<t_enum>::count; }
 
 template<typename t_enum>
-VLCHOST_INLINE constexpr t_enum enum_last() { return enum_num<t_enum>() }
+VLCHOST_INLINE constexpr t_enum enum_last() { return enum_num<t_enum>(); }
 

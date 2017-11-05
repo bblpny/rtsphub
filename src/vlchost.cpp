@@ -115,7 +115,7 @@ int JobContext::Execute(VLCX::VLCInstance & vlc, const json &js) const {
 		}
 	}
 	else if (js.is_object()) {
-		auto & opname = js.find("op");
+		const auto & opname = js.find("op");
 		if (opname != js.cend()) {
 			auto & optitle = opname.value();
 			if (optitle.is_string())
@@ -217,8 +217,8 @@ JobContext::JobContext(JobList &list, const json &j)
 	, List(list)
 	, BootInstance(nullptr)
 	, Thread(nullptr)
-	, Exit(0)
 	, Lock(nullptr) 
+	, Exit(0)
 {
 	if (List.Size++)
 	{
@@ -248,7 +248,6 @@ inline JobContext *JobList::New(const json&j) {
 }
 
 inline JobContext *JobList::Boot() {
-	typedef int (threadfunct)(JobContext&, VLCInstance);
 	JobContext *jc, *err = nullptr;
 	int iter;
 
@@ -330,7 +329,7 @@ int main(int argc, char **args)
 
 	if (j.is_object()) {
 		{
-			auto&instances = j.find("instances");
+			const auto&instances = j.find("instances");
 			if (instances != j.end()) {
 				j = instances.value();
 			}
@@ -367,11 +366,12 @@ int main(int argc, char **args)
 	int exit_pos = 0;
 
 	while (std::cin.read(&ch, 1) && ch) {
-		if (exit_pos == 4)
+		if (exit_pos == 4) {
 			if (ch == '\r' || ch == '\n')
 				break;
 			else
 				exit_pos = 0;
+		}
 
 		if (ch != "exit"[exit_pos] && ch != "EXIT"[exit_pos])
 			exit_pos = 0;
@@ -414,3 +414,15 @@ inline static auto &WindowClassRegistered() {
 	return o;
 }
 #endif
+
+
+
+#define Macro_VLCHOST_OP(ret,e,titlechars,call,prec,postc,...) \
+constexpr const char x_op<e_op::e>::title[];
+Macro_VLCHOST_Enumerate_Op()
+
+#define Macro_VLCHOST_ArgExp(e,...) \
+constexpr const char x_arg<e_arg::e>::title[]; \
+constexpr const decltype(x_arg<e_arg::e>::fb) x_arg<e_arg::e>::fb;
+
+Macro_VLCHOST_ArgTable(Macro_VLCHOST_ArgExp)
