@@ -1,7 +1,7 @@
 // rtsphub.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
+#include "include/vlchost.h"
 #include "include/vlchost_task.h"
 
 LIBVLCX_NAMESPACE(USE)
