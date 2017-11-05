@@ -120,8 +120,8 @@ struct x_nce2ce<std::vector<std::string>, arrarg_t> {
 			return nullptr;
 		else
 		{
-			if (!reg) throw std::exception("reg needed, reg** is nullptr.");
-			if (*reg) throw std::exception("reg needed, *reg is was not nullptr (maybe it was populated wrong?)");
+			if (!reg) throw std::runtime_error("reg needed, reg** is nullptr.");
+			if (*reg) throw std::runtime_error("reg needed, *reg is was not nullptr (maybe it was populated wrong?)");
 
 			// allocate the array.
 			*reg = malloc(sizeof(strarg_t)*(n + 1));
