@@ -1,0 +1,3 @@
+[submodule "include/vlcx"]
+	path = include/vlcx
+	url = https://github.com/bblpny/libvlcx
