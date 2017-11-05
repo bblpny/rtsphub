@@ -472,7 +472,7 @@ template<> constexpr const e_void &opresult::get_ret<e_void>()const { return ret
 
 template<typename tinv, e_op e>
 VLCHOST_INLINE bool json_exec(tinv&vlc, const std::string&op, const json&j, opresult&r) {
-	return (r = opresult(e, x_op<e>::json_invoke<tinv>(vlc, j))).found;
+	return (r = opresult(e, x_op<e>::template json_invoke<tinv>(vlc, j))).found;
 }
 
 template<typename tinv, e_op...choices>
