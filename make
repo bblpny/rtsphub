@@ -1,0 +1,1 @@
+clang++ -std=c++14 -I ./src/ -lstdc++ -lvlc -lpthread -o rtsphub src/vlchost.cpp
