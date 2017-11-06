@@ -45,7 +45,7 @@ boot: (optional) the command line arguments (passed to libvlc_new).
 since libvlc is pretty straight forward, without much explaination here is a list of values for the op command and each property argument for them:
 
 ## configuration of instance
-
+```
 {"op":"add-intf"	(adds an interface to libvlc) [result]
 	"name":(string) name of the interface / module. see notes on libvlc_add_intf, optional
 	}
@@ -60,7 +60,7 @@ since libvlc is pretty straight forward, without much explaination here is a lis
 	"name":(string) name to use for user agent when streaming out.
 	"version":(string) http version string.
 }
-
+```
 ## adding media
 (all of these are optional)
 ```
