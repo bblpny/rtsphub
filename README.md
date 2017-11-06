@@ -62,7 +62,8 @@ since libvlc is pretty straight forward, without much explaination here is a lis
 }
 
 ## adding media
-
+(all of these are optional)
+```
 {"op":"add-broadcast"(creates new media) [result]
 	"name":(string) name to assign to media
 	"input":(string) the mrl or #command for input (where it comes from).
@@ -86,7 +87,7 @@ since libvlc is pretty straight forward, without much explaination here is a lis
 	"name":(string) name to assign to media
 	"input":(string) the mrl or #command for input (where it comes from).
 }
-
+```
 ## modifying or interacting with media.
 ```
 {"op":"play"		(begins playback of media) [result]
@@ -169,6 +170,8 @@ clang++ -std=c++14 -I ./src/ -lstdc++ -lvlc -lpthread -o rtsphub src/vlchost.cpp
 # Third Party
 
 This utility utilizes:
-<a href="https://github.com/videolan/vlc">libvlc</a>
-<a href="https://github.com/nlohmann/json">json.hpp</a>
-<a href="https://github.com/bblpny/libvlcx">libvlcx</a>
+## <a href="https://github.com/videolan/vlc">libvlc</a>
+
+## <a href="https://github.com/nlohmann/json">json.hpp</a>
+
+## <a href="https://github.com/bblpny/libvlcx">libvlcx</a>
