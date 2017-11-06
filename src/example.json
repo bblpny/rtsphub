@@ -1,0 +1,26 @@
+{
+  "instances": {
+    "instance-name-here": {
+      "boot": [],
+	  
+      "tasks": [
+        {
+          "op": "add-broadcast",
+		  
+          "name": "O",
+          "input": "rtsp://usr:pwd@192.168.1.0:554/cam/realmonitor?channel=1&subtype=0",
+          "output": "#rtp{dst=192.170.1.153,port=80,sdp=rtsp://192.168.1.2/stream0.sdp}",
+		  "opts":[],
+          "flags": 0,
+          "enabled": true,
+          "loop": false
+        },
+        {
+          "op": "play",
+		  
+          "name": "O"
+        }
+      ]
+    }
+  }
+}
