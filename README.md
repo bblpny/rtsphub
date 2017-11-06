@@ -150,9 +150,10 @@ since libvlc is pretty straight forward, without much explaination here is a lis
 	"loop":(bool) should this loop?
 ```
 ## additional notes:
-	any command listed above that has [result] after its name can fail. when it succeeds the runtime checks if there is a json property named "if" and when it fails it checks for a json property named "else". "if" or "else" can be another list of tasks or a single task object but..
-	Importantly note that if a failure occurs the thread will stop execution UNLESS you provide "else":null to ignore the failure.
-	
+any command listed above that has [result] after its name can fail. when it succeeds the runtime checks if there is a json property named "if" and when it fails it checks for a json property named "else". "if" or "else" can be another list of tasks or a single task object but..
+Importantly note that if a failure occurs the thread will stop execution UNLESS you provide "else":null to ignore the failure.
+
+Also, always try to close the app by typing exit, as it ensures all things are closed properly. Ctrl+Z on terminal will fail to close sockets created by libvlc properly
 # Compiling
 
 For all targets ensure the submodules are acquired ("include/vlcx")
